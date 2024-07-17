@@ -15,6 +15,10 @@
   width: auto;
   height: auto;
   z-index: -1;
+  top:100%;
+  left:100%;
+  right:100%;
+  bottom:100%;
 }
 .main {
   min-height: 100vh;
