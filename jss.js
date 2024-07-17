@@ -12,23 +12,19 @@ function speak(text){
     window.speechSynthesis.speak(text_speak);
 }
 
-function wishMe(){
-    var day = new Date();
-    var hour = day.getHours();
+function wishMe() {
+    const now = new Date();
+    const userHour = now.getHours();
 
-    if(hour>=0 && hour<12){
-        speak("Good Morning Boss...")
+    if (userHour >= 0 && userHour < 12) {
+        speak("Good Morning!");
+    } else if (userHour >= 12 && userHour < 17) {
+        speak("Good Afternoon!");
+    } else {
+        speak("Good Evening!");
     }
-
-    else if(hour>12 && hour<17){
-        speak("Good Afternoon Master...")
-    }
-
-    else{
-        speak("Good Evenining Sir...")
-    }
-
 }
+
 
 window.addEventListener('load', ()=>{
     speak("Initializing VADARLY..");
