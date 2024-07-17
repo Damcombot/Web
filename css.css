@@ -66,7 +66,7 @@
   width: 20vw;
   height: 50px;
   border-radius: 20px;
-  background: darkgreen;
+  background: #d40f3d;
   animation: btn 2s;
 }
 .main .input:hover{
@@ -98,10 +98,10 @@
   margin-right: 20px;
 }
 @keyframes colour{
-    from{background:darkgreen;}
-    to{background:#0A7098;box-shadow: 0 0px 30px 0px rgba(255, 255, 255, 0.721), 0 0px 60px 0 rgba(255, 255, 255, 0.712);}
+    from{background:#d40f3d;}
+    to{background:#0fd4a6;box-shadow: 0 0px 30px 0px rgba(255, 255, 255, 0.721), 0 0px 60px 0 rgba(255, 255, 255, 0.712);}
 }
 @keyframes btn{
-  from{background:#0A7098;box-shadow: 0 0px 30px 0px rgba(255, 255, 255, 0.721), 0 0px 60px 0 rgba(255, 255, 255, 0.719);}
-  to{background:darkgreen; }
+  from{background:#0fd4a6;box-shadow: 0 0px 30px 0px rgba(255, 255, 255, 0.721), 0 0px 60px 0 rgba(255, 255, 255, 0.719);}
+  to{background:#d40f3d; }
 }
