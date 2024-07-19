@@ -25,8 +25,8 @@ const btn = document.querySelector('.talk');
                 if (index < text.length) {
                     textElement.textContent = textElement.textContent.slice(0, index) + text[index] + textElement.textContent.slice(index + 1);
                     index++;
-                if (index===23){
-                    setTimeout(animateText,400); 
+                if (index===25){
+                    setTimeout(animateText,350); 
                 }
                 else{
                     setTimeout(animateText,60);
