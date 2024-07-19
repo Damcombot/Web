@@ -142,5 +142,6 @@ li:not(:last-child)::after {
 }
 li:hover{
   font-weight: bolder;
-  text-transform: uppercase;
+  transition-duration: 0.7s;
+  color:#8be8ee
 }
