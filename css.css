@@ -128,10 +128,15 @@ li {
 .list-container {
   text-align: center;
   padding-bottom: 20px;
-  padding-top:120px;
+  padding-top:10px;
 }
 li:not(:last-child)::after {
   content: "|";
   padding-left: 30px;
   padding-right: 30px;
+}
+.listcontainer {
+  text-align: center;
+  padding-top:70px;
+  color: azure;
 }
