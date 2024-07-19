@@ -27,10 +27,10 @@ document.addEventListener('DOMContentLoaded', () => {
             textElement.textContent = textElement.textContent.slice(0, index) + text[index] + textElement.textContent.slice(index + 1);
             index++;
 		if (index===12){
-			setTimeout(animateText,1300); 
+			setTimeout(animateText,600); 
 		}
 		else if (index===38){
-			setTimeout(animateText,700);
+			setTimeout(animateText,400);
 		}
 		else{
 			setTimeout(animateText,60);
