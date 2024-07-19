@@ -25,12 +25,6 @@ function wishMe() {
     }
 }
 
-
-window.addEventListener('load', ()=>{
-    speak("Initializing VADARLY..");
-    wishMe();
-});
-
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
 const recognition =  new SpeechRecognition();
@@ -42,6 +36,11 @@ recognition.onresult = (event)=>{
     takeCommand(transcript.toLowerCase());
 
 }
+
+window.addEventListener('load', ()=>{
+    speak("Initializing VADARLY..");
+    wishMe();
+});
 
 btn.addEventListener('click', ()=>{
     content.textContent = "Listening...."
