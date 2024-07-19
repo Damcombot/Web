@@ -1,6 +1,38 @@
 const btn = document.querySelector('.talk')
 const content = document.querySelector('.content')
 
+document.addEventListener('DOMContentLoaded', () => {
+    const textElement = document.getElementById('animated-text');
+    const text = "VADARLY";
+    let index = 0;
+
+    const animateText = () => {
+        if (index < text.length) {
+            textElement.textContent = textElement.textContent.slice(0, index) + text[index] + textElement.textContent.slice(index + 1);
+            index++;
+            setTimeout(animateText, 130); 
+        }
+    };
+
+    setTimeout(animateText, 1000); 
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const textElement = document.getElementById('animated-para');
+    const text = "I'm Vadarly a voice assistant,How may i help you?";
+    let index = 0;
+
+    const animateText = () => {
+        if (index < text.length) {
+            textElement.textContent = textElement.textContent.slice(0, index) + text[index] + textElement.textContent.slice(index + 1);
+            index++;
+            setTimeout(animateText, 40); 
+        }
+    };
+
+    setTimeout(animateText, 1500); 
+});
+
 
 function speak(text){
     const text_speak = new SpeechSynthesisUtterance(text);
@@ -12,18 +44,24 @@ function speak(text){
     window.speechSynthesis.speak(text_speak);
 }
 
-function wishMe() {
-    const now = new Date();
-    const userHour = now.getHours();
+function wishMe(){
+    var day = new Date();
+    var hour = day.getHours();
 
-    if (userHour >= 0 && userHour < 12) {
-        speak("Good Morning!");
-    } else if (userHour >= 12 && userHour < 17) {
-        speak("Good Afternoon!");
-    } else {
-        speak("Good Evening!");
+    if(hour>=0 && hour<12){
+        speak("Good Morning Boss...")
     }
+
+    else if(hour>12 && hour<17){
+        speak("Good Afternoon Master...")
+    }
+
+    else{
+        speak("Good Evenining Sir...")
+    }
+
 }
+
 
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
@@ -36,11 +74,11 @@ recognition.onresult = (event)=>{
     takeCommand(transcript.toLowerCase());
 
 }
-
 window.addEventListener('load', ()=>{
     speak("Initializing VADARLY..");
     wishMe();
 });
+
 
 btn.addEventListener('click', ()=>{
     content.textContent = "Listening...."

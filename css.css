@@ -5,6 +5,7 @@
   padding: 0;
   box-sizing: border-box;
   font-family: "Roboto Mono", monospace;
+  overflow: hidden;
 }
 
 #bg-video {
@@ -12,10 +13,11 @@
   transform: translate(-50%, -50%);
   min-width: 100%;
   min-height: 100%;
-  width:auto;
-  height:auto;
+  width: auto;
+  height: auto;
   z-index: -1;
 }
+
 .main {
   min-height: 100vh;
   position: relative;
@@ -24,24 +26,15 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  overflow:hidden;
+  justify-content: space-between;
 }
 
 .main .image-container {
-  padding: 10px;
-}
-
-.main .image-container .image {
-  width: 100%;
-  display: flex;
-  align-items: center;
+  text-align: center;
   justify-content: center;
-}
-
-.main .image-container .image img {
-  width: 350px;
   align-items: center;
+  display:block;
+  margin-top: 35vh;
 }
 
 
@@ -49,12 +42,14 @@
   color: #ffffff;
   text-align: center;
   margin-bottom: 10px;
-  font-size: 40px;
+  font-size: 50px;
+  letter-spacing: 20px;
 }
 
 .main .image-container p {
   color: #ffffff;
   text-align: center;
+  font-size: 17px;
   margin-bottom: 40px;
 }
 
@@ -68,10 +63,11 @@
   background: #d40f3d;
   animation: btn 2s;
 }
-.main .input:hover{
-    animation-name: colour;
-    animation-duration: 2s;
-    animation-fill-mode: forwards;
+
+.main .input:hover {
+  animation-name: colour;
+  animation-duration: 2s;
+  animation-fill-mode: forwards;
 }
 
 .main .input .talk {
@@ -86,6 +82,7 @@
   font-size: 15px;
   cursor: pointer;
 }
+
 .main .input .talk i {
   font-size: 20px;
   color: #ffffff;
@@ -96,16 +93,45 @@
   font-size: 15px;
   margin-right: 20px;
 }
-@keyframes colour{
-    from{background:#d40f3d;}
-    to{background:#0fd4a6;box-shadow: 0 0px 30px 0px rgba(255, 255, 255, 0.721), 0 0px 60px 0 rgba(255, 255, 255, 0.712);}
+
+@keyframes colour {
+  from {
+    background: #d40f3d;
+  }
+  to {
+    background: #0fd4a6;
+    box-shadow: 0 0px 30px 0px rgba(255, 255, 255, 0.721), 0 0px 60px 0 rgba(255, 255, 255, 0.712);
+  }
 }
-@keyframes btn{
-  from{background:#0fd4a6;box-shadow: 0 0px 30px 0px rgba(255, 255, 255, 0.721), 0 0px 60px 0 rgba(255, 255, 255, 0.719);}
-  to{background:#d40f3d; }
+
+@keyframes btn {
+  from {
+    background: #0fd4a6;
+    box-shadow: 0 0px 30px 0px rgba(255, 255, 255, 0.721), 0 0px 60px 0 rgba(255, 255, 255, 0.719);
+  }
+  to {
+    background: #d40f3d;
+  }
 }
+
 @media screen and (max-width: 400px) {
   .main .input {
-    width:50vw;
+    width: 50vw;
   }
+}
+
+li {
+  display: inline;
+  color: rgb(255, 255, 255);
+}
+
+.list-container {
+  text-align: center;
+  padding-bottom: 20px;
+  padding-top:120px;
+}
+li:not(:last-child)::after {
+  content: "|";
+  padding-left: 30px;
+  padding-right: 30px;
 }
