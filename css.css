@@ -140,3 +140,7 @@ li:not(:last-child)::after {
   padding-top:70px;
   color: azure;
 }
+li:hover{
+  font-weight: bolder;
+  text-transform: uppercase;
+}
