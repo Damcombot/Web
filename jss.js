@@ -26,9 +26,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if (index < text.length) {
             textElement.textContent = textElement.textContent.slice(0, index) + text[index] + textElement.textContent.slice(index + 1);
             index++;
-            setTimeout(animateText, 60); 
-        }
-    };
+		if (index===30){
+			setTimeout(animateText,1800); 
+		}
+		else if (index===50){
+			setTimeout(animateText,700);
+		}
+		else{
+			setTimeout(animateText,60);
+		}
+	}
+};
 
     setTimeout(animateText, 2700); 
 });
