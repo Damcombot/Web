@@ -141,7 +141,7 @@ li:not(:last-child)::after {
   color: azure;
 }
 li:hover{
-  font-size:24px;
-  transition-duration: 1.4s;
-  color:#46cbe8
+  font-size:20px;
+  transition-duration: 1s;
+  color:#0fd4a6;
 }
