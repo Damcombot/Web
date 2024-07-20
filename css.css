@@ -118,6 +118,9 @@
   .main .input {
     width: 50vw;
   }
+  .listcontainer{
+    padding-top:30px;
+  }
 }
 
 li {
