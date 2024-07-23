@@ -119,7 +119,10 @@
     width: 50vw;
   }
   .listcontainer{
-    padding-top:30px;
+    padding-top:15px;
+  }
+  .list-container{
+    padding-top:8px;
   }
 }
 
@@ -143,8 +146,7 @@ li:not(:last-child)::after {
   padding-top:70px;
   color: azure;
 }
-li:hover{
-  font-size:19px;
-  transition-duration: 0.7s;
+li:hover{
+  transition-duration: 0.5s;
   color:#75ceb9;
 }
