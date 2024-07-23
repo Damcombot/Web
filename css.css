@@ -124,6 +124,9 @@
   .list-container{
     padding-top:8px;
   }
+  .main .image-container p {
+    margin-bottom:20px;
+  }
 }
 
 li {
