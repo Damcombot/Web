@@ -114,18 +114,15 @@
   }
 }
 
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 500px) {
   .main .input {
     width: 50vw;
   }
-  .listcontainer{
-    padding-top:5px;
-  }
   .list-container{
-    padding-top:8px;
+    visibility: hidden;
   }
-  .main .image-container p {
-    margin-bottom:10px;
+  .listcontainer{
+    visibility: hidden;
   }
 }
 
@@ -149,7 +146,8 @@ li:not(:last-child)::after {
   padding-top:70px;
   color: azure;
 }
-li:hover{
+li:hover{
+
   transition-duration: 0.5s;
   color:#75ceb9;
 }
