@@ -33,10 +33,9 @@
   text-align: center;
   justify-content: center;
   align-items: center;
-  display:block;
+  display: block;
   margin-top: 35vh;
 }
-
 
 .main .image-container h1 {
   color: #ffffff;
@@ -100,14 +99,16 @@
   }
   to {
     background: #0fd4a6;
-    box-shadow: 0 0px 30px 0px rgba(255, 255, 255, 0.721), 0 0px 60px 0 rgba(255, 255, 255, 0.712);
+    box-shadow: 0 0px 30px 0px rgba(255, 255, 255, 0.721),
+      0 0px 60px 0 rgba(255, 255, 255, 0.712);
   }
 }
 
 @keyframes btn {
   from {
     background: #0fd4a6;
-    box-shadow: 0 0px 30px 0px rgba(255, 255, 255, 0.721), 0 0px 60px 0 rgba(255, 255, 255, 0.719);
+    box-shadow: 0 0px 30px 0px rgba(255, 255, 255, 0.721),
+      0 0px 60px 0 rgba(255, 255, 255, 0.719);
   }
   to {
     background: #d40f3d;
@@ -118,10 +119,10 @@
   .main .input {
     width: 50vw;
   }
-  .list-container{
+  .list-container {
     visibility: hidden;
   }
-  .listcontainer{
+  .listcontainer {
     visibility: hidden;
   }
 }
@@ -134,7 +135,7 @@ li {
 .list-container {
   text-align: center;
   padding-bottom: 20px;
-  padding-top:10px;
+  padding-top: 10px;
 }
 li:not(:last-child)::after {
   content: "|";
@@ -143,11 +144,10 @@ li:not(:last-child)::after {
 }
 .listcontainer {
   text-align: center;
-  padding-top:70px;
+  padding-top: 70px;
   color: azure;
 }
-li:hover{
-
+li:hover {
   transition-duration: 0.5s;
-  color:#75ceb9;
+  color: #75ceb9;
 }
