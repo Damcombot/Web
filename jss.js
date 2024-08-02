@@ -1,5 +1,7 @@
 const btn = document.querySelector(".talk");
+const stopBtn = document.querySelector(".stop");
 const content = document.querySelector(".content");
+
 document.addEventListener("DOMContentLoaded", () => {
   const textElement = document.getElementById("animated-text");
   const text = "VADARLY";
@@ -7,10 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const animateText = () => {
     if (index < text.length) {
-      textElement.textContent =
-        textElement.textContent.slice(0, index) +
-        text[index] +
-        textElement.textContent.slice(index + 1);
+      textElement.textContent = textElement.textContent.slice(0, index) + text[index] + textElement.textContent.slice(index + 1);
       index++;
       setTimeout(animateText, 130);
     }
@@ -21,21 +20,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
 document.addEventListener("DOMContentLoaded", () => {
   const textElement = document.getElementById("animated-para");
-  const text = "I'm Vadarly a voice assistant,How may i help you?";
+  const text = "I'm Vadarly, a voice assistant. How may I help you?";
   let index = 0;
 
   const animateText = () => {
     if (index < text.length) {
-      textElement.textContent =
-        textElement.textContent.slice(0, index) +
-        text[index] +
-        textElement.textContent.slice(index + 1);
+      textElement.textContent = textElement.textContent.slice(0, index) + text[index] + textElement.textContent.slice(index + 1);
       index++;
-      if (index === 25) {
-        setTimeout(animateText, 350);
-      } else {
-        setTimeout(animateText, 60);
-      }
+      setTimeout(animateText, index === 25 ? 350 : 60);
     }
   };
 
@@ -43,20 +35,18 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function speak(text) {
-  const text_speak = new SpeechSynthesisUtterance(text);
-  text_speak.rate = 1;
-  text_speak.volume = 1;
-  text_speak.pitch = 1;
-  window.speechSynthesis.speak(text_speak);
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.rate = 1;
+  utterance.volume = 1;
+  utterance.pitch = 1;
+  window.speechSynthesis.speak(utterance);
 }
 
 function wishMe() {
-  var day = new Date();
-  var hour = day.getHours();
-
-  if (hour >= 0 && hour < 12) {
+  const hour = new Date().getHours();
+  if (hour < 12) {
     speak("Good Morning Boss...");
-  } else if (hour >= 12 && hour < 17) {
+  } else if (hour < 17) {
     speak("Good Afternoon Master...");
   } else {
     speak("Good Evening Sir...");
@@ -68,22 +58,22 @@ window.addEventListener("load", () => {
   wishMe();
 });
 
-const SpeechRecognition =
-  window.SpeechRecognition || window.webkitSpeechRecognition;
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognition = new SpeechRecognition();
 
-let numbers = [];
-
 recognition.onresult = (event) => {
-  const currentIndex = event.resultIndex;
-  const transcript = event.results[currentIndex][0].transcript;
+  const transcript = event.results[event.resultIndex][0].transcript.toLowerCase();
   content.textContent = transcript;
-  takeCommand(transcript.toLowerCase());
+  takeCommand(transcript);
 };
 
 btn.addEventListener("click", () => {
   content.textContent = "Listening...";
   recognition.start();
+});
+
+stopBtn.addEventListener("click", () => {
+  window.speechSynthesis.cancel();
 });
 
 function takeCommand(message) {
@@ -95,86 +85,42 @@ function takeCommand(message) {
   } else if (message.includes("open youtube")) {
     window.open("https://youtube.com", "_blank");
     speak("Opening Youtube...");
-  } else if (
-    message.includes("what is your name") ||
-    message.includes("who are you")
-  ) {
-    speak(
-      "My name is VADARLY, your voice assistant. I am here to assist you..."
-    );
-  } else if (
-    message.includes("what is") ||
-    message.includes("who is") ||
-    message.includes("what are")
-  ) {
-    getWikipediaSummary(
-      message
-        .replace("what is", "")
-        .replace("who is", "")
-        .replace("what are", "")
-        .trim()
-    );
+  } else if (message.includes("what is your name") || message.includes("who are you")) {
+    speak("My name is VADARLY, your voice assistant. I am here to assist you...");
+  } else if (message.includes("what is") || message.includes("who is") || message.includes("what are")) {
+    getSummary(message.replace(/(what is|who is|what are)/, "").trim());
   } else if (message.includes("time")) {
-    const time = new Date().toLocaleString(undefined, {
-      hour: "numeric",
-      minute: "numeric",
-    });
-    const finalText = time;
-    speak(finalText);
+    speak(new Date().toLocaleString(undefined, { hour: "numeric", minute: "numeric" }));
   } else if (message.includes("date")) {
-    const date = new Date().toLocaleString(undefined, {
-      month: "short",
-      day: "numeric",
-    });
-    const finalText = date;
-    speak(finalText);
+    speak(new Date().toLocaleString(undefined, { month: "short", day: "numeric" }));
   } else if (message.includes("calculator")) {
     window.open("Calculator:///");
-    const finalText = "Opening Calculator...";
-    speak(finalText);
-  } else if (
-    message.includes("add") ||
-    message.includes("subtract") ||
-    message.includes("multiply") ||
-    message.includes("divide")
-  ) {
+    speak("Opening Calculator...");
+  } else if (message.match(/(add|subtract|multiply|divide)/)) {
     handleArithmetic(message);
   } else {
-    window.open(
-      `https://www.google.com/search?q=${message.replace(" ", "+")}`,
-      "_blank"
-    );
-    const finalText =
-      "This is what I found on the internet regarding " + message;
-    speak(finalText);
+    getAnswerFromModel(message);
   }
 }
+
 function handleArithmetic(message) {
   let result;
   try {
-    // Extract numbers and operation from the message
     const words = message.split(" ");
     let num1, num2, operator;
 
-    words.forEach((word, index) => {
+    words.forEach(word => {
       if (!isNaN(word)) {
         if (num1 === undefined) {
           num1 = parseFloat(word);
         } else {
           num2 = parseFloat(word);
         }
-      } else if (word === "add") {
-        operator = "+";
-      } else if (word === "subtract") {
-        operator = "-";
-      } else if (word === "multiply") {
-        operator = "*";
-      } else if (word === "divide") {
-        operator = "/";
+      } else if (["add", "subtract", "multiply", "divide"].includes(word)) {
+        operator = word === "add" ? "+" : word === "subtract" ? "-" : word === "multiply" ? "*" : "/";
       }
     });
 
-    // Calculate the result
     if (num1 !== undefined && num2 !== undefined && operator) {
       result = eval(`${num1} ${operator} ${num2}`);
       speak(`The result is ${result}`);
@@ -185,19 +131,51 @@ function handleArithmetic(message) {
     speak("Sorry, I couldn't perform the arithmetic operation.");
   }
 }
-function getWikipediaSummary(topic) {
-  const url = `https://en.wikipedia.org/api/rest_v1/page/summary/${topic}`;
+
+function getSummary(topic) {
+  const sanitizedTopic = topic.replace(/[()]/g, ""); // Remove parentheses from topic
+  const url = `https://en.wikipedia.org/api/rest_v1/page/summary/${sanitizedTopic}`;
 
   fetch(url)
-    .then((response) => response.json())
-    .then((data) => {
+    .then(response => response.json())
+    .then(data => {
       if (data.extract) {
         speak(data.extract);
+      } else {
+        fallbackSearch(topic);
+      }
+    })
+    .catch(() => {
+      fallbackSearch(topic);
+    });
+}
+
+function fallbackSearch(topic) {
+  const query = encodeURIComponent(topic);
+  const url = `https://api.duckduckgo.com/?q=${query}&format=json`;
+
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      if (data.Abstract) {
+        speak(data.Abstract);
       } else {
         speak("Sorry, I couldn't find information on that topic.");
       }
     })
-    .catch((error) => {
+    .catch(() => {
       speak("Sorry, I couldn't retrieve the information.");
     });
+}
+
+function getAnswerFromModel(message) {
+  const responses = {
+    "how are you": "I am doing great, thank you!",
+    "what is your purpose": "My purpose is to assist you with your tasks.",
+    "tell me a joke": "Why don't scientists trust atoms? Because they make up everything!",
+    "who created you": "I was created by a team of skilled developers."
+  };
+
+  const response = responses[message] || "Sorry, I don't have an answer for that.";
+  speak(response);
 }
