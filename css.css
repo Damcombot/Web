@@ -7,15 +7,7 @@
   font-family: "Roboto Mono", monospace;
   overflow: hidden;
 }
-a{
-  text-decoration: none;
-  text-transform: none;
-  color: azure;
-}
-a:hover{
-  transition-duration: 0.5s;
-  color: #75ceb9;
-}
+
 #bg-video {
   position: absolute;
   transform: translate(-50%, -50%);
@@ -41,9 +33,10 @@ a:hover{
   text-align: center;
   justify-content: center;
   align-items: center;
-  display: block;
+  display:block;
   margin-top: 35vh;
 }
+
 
 .main .image-container h1 {
   color: #ffffff;
@@ -107,33 +100,26 @@ a:hover{
   }
   to {
     background: #0fd4a6;
-    box-shadow: 0 0px 30px 0px rgba(255, 255, 255, 0.721),
-      0 0px 60px 0 rgba(255, 255, 255, 0.712);
+    box-shadow: 0 0px 30px 0px rgba(255, 255, 255, 0.721), 0 0px 60px 0 rgba(255, 255, 255, 0.712);
   }
 }
 
 @keyframes btn {
   from {
     background: #0fd4a6;
-    box-shadow: 0 0px 30px 0px rgba(255, 255, 255, 0.721),
-      0 0px 60px 0 rgba(255, 255, 255, 0.719);
+    box-shadow: 0 0px 30px 0px rgba(255, 255, 255, 0.721), 0 0px 60px 0 rgba(255, 255, 255, 0.719);
   }
   to {
     background: #d40f3d;
   }
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 400px) {
   .main .input {
     width: 50vw;
   }
-  .list-container {
-    visibility: hidden;
-  }
-  .listcontainer {
-    visibility: hidden;
-  }
 }
+
 
 li {
   display: inline;
@@ -143,19 +129,31 @@ li {
 .list-container {
   text-align: center;
   padding-bottom: 20px;
-  padding-top: 10px;
+  padding-top:120px;
 }
 li:not(:last-child)::after {
   content: "|";
   padding-left: 30px;
   padding-right: 30px;
 }
-.listcontainer {
-  text-align: center;
-  padding-top: 70px;
-  color: azure;
+.stop {
+  width: 100px;
+  height: 40px;
+  background-color: #d40f3d;
+  color: #ffffff;
+  border: none;
+  border-radius: 20px;
+  font-size: 15px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
 }
-li:hover {
-  transition-duration: 0.5s;
-  color: #75ceb9;
+
+.stop:hover {
+  background-color: #0fd4a6;
 }
+
+
