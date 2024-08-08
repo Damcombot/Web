@@ -164,7 +164,7 @@ a{
 a:hover{
   text-decoration: none;
   color: azure;
-  cursor: pointer;
+  cursor: text;
 }
 .stop:hover {
   background-color: #0fd4a6;
