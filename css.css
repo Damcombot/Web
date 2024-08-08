@@ -118,6 +118,13 @@
   .main .input {
     width: 50vw;
   }
+  .list-container {
+    visibility: hidden;
+  }
+  .listcontainer {
+    visibility: hidden;
+  }
+
 }
 
 
@@ -129,7 +136,7 @@ li {
 .list-container {
   text-align: center;
   padding-bottom: 20px;
-  padding-top:120px;
+  padding-top:10px;
 }
 li:not(:last-child)::after {
   content: "|";
@@ -154,6 +161,7 @@ li:not(:last-child)::after {
 
 .stop:hover {
   background-color: #0fd4a6;
+  box-shadow: 0 0px 30px 0px rgba(255, 255, 255, 0.721), 0 0px 60px 0 rgba(255, 255, 255, 0.712);
 }
 
 
