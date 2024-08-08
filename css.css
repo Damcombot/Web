@@ -157,12 +157,12 @@ li:not(:last-child)::after {
   margin-top: 10px;
   transition: background-color 0.3s ease;
 }
-.a{
+a{
   text-decoration: none;
   text-transform: none;
   color: azure;
 }
-.a:hover{
+a:hover{
   text-decoration: none;
   text-transform: none;
   color: azure;
