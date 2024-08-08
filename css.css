@@ -159,7 +159,7 @@ li:not(:last-child)::after {
 a{
   text-decoration: none;
   color: azure;
-  cursor: pointer;
+  cursor: text;
 }
 a:hover{
   text-decoration: none;
