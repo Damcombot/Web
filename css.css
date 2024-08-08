@@ -142,7 +142,7 @@ li:not(:last-child)::after {
   padding-left: 30px;
   padding-right: 30px;
 }
-.kstop {
+.stop {
   width: 100px;
   height: 40px;
   background-color: #d40f3d;
@@ -150,7 +150,6 @@ li:not(:last-child)::after {
   border: none;
   border-radius: 20px;
   font-size: 15px;
-  cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -159,12 +158,10 @@ li:not(:last-child)::after {
 }
 a{
   text-decoration: none;
-  text-transform: none;
   color: azure;
 }
 a:hover{
   text-decoration: none;
-  text-transform: none;
   color: azure;
 }
 .stop:hover {
