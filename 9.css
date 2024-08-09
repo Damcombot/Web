@@ -38,8 +38,8 @@ button {
     cursor: pointer;
     animation-duration: 0.5s;
     margin-inline: 1vw;
-    height: 10vh;
-    width: 12vw;
+    min-height: 10vh;
+    min-width: 12vw;
     transition: background-color 0.5s ease; /* Smooth transition */
 }
 
@@ -73,7 +73,15 @@ h1 {
     text-shadow: 2px 2px 4px rgba(89, 89, 89, 0.6);
     text-align: center; /* Center align the title */
 }
-
+@media screen and (max-width: 500px){
+    div{
+        display: grid;
+        flex-direction: column;
+    }
+    #results{
+        max-height:max-content;
+    }
+}
 /* Result display */
 #result {
     white-space: pre-wrap; /* Preserve line breaks */
