@@ -1,52 +1,185 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
+    <link rel="stylesheet" href="9.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Edu+AU+VIC+WA+NT+Hand:wght@400..700&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Space+Grotesk:wght@300..700&family=Syncopate:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vadarly</title>
-    <link
-      rel="shortcut icon"
-      href="https://i.ibb.co/4FVQT2j/eye.png"
-      type="image/x-icon"
-    />
-    <link rel="stylesheet" href="css.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-    />
   </head>
-
   <body>
-    <section class="main">
-      <div class="image-container">
-        <h1 id="animated-text">!@#$%^&</h1>
-        <p id="animated-para"></p>
-      </div>
-      <div>
-        <video autoplay muted loop id="bg-video">
-          <source src="videoplayback.webm" type="video/webm" />
-        </video>
-      </div>
-      <div class="input">
-        <button class="talk"><i class="fas fa-microphone-alt"></i></button>
-        <h1 class="content">speak</h1>
-      </div>
-      <button class="stop">Stop</button>
+    <!-- Display project name -->
+    <h1 id="animated-text">@#%^*~&</h1>
 
-      <div class="list-container">
-        <ol style="list-style-type: none">
-          <li><a href="https://damcombot.github.io/leonuraht/" target="_blank">Tharun</a></li>
-          <li>Krishna</li>
-          <li>Sachin</li>
-          <li>Kamal</li>
-          <li>Ananjan</li>
-          <li>Sagar</li>
-          <li>Shanjith</li>
-        </ol>
-      </div>
-    </section>
+    <!-- Buttons for voice input and stopping -->
+    <div class="niu">
+      <button id="startBtn">Speak</button>
+      <button id="stopBtn">Stop</button>
+      <p id="promptDisplay">
+        I'm Vadarly, a voice assistant. How may I help you?
+      </p>
+    </div>
+    <video autoplay muted loop id="bg-video">
+      <source
+        src="C:\Users\Jmbli\Downloads\videoplayback.webm"
+        type="video/webm"
+      />
+    </video>
 
-    <script src="jss.js"></script>
+    <!-- Area to display the result -->
+    <div id="result" style="margin-top: 20px">
+      Tharun | Krishna | Kamal | Sagar | Sachin | Ananjan | Shanjith
+    </div>
+
+    <!-- Import @google/generative-ai -->
+    <script type="importmap">
+      {
+        "imports": {
+          "@google/generative-ai": "https://esm.run/@google/generative-ai"
+        }
+      }
+    </script>
+
+    <script type="module">
+      import { GoogleGenerativeAI } from "@google/generative-ai";
+
+      // Fetch your API_KEY
+      const API_KEY = "AIzaSyBx4K2HYyJN13yXRf01tnDh5dQ-XLpzx_k";
+
+      // Access your API key
+      const genAI = new GoogleGenerativeAI(API_KEY);
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+      let isSpeaking = false;
+      
+      document.addEventListener("DOMContentLoaded", () => {
+        const textElement = document.getElementById("animated-text");
+        const text = "VADARLY";
+        let index = 0;
+
+        const animateText = () => {
+          if (index < text.length) {
+            textElement.textContent =
+              textElement.textContent.slice(0, index) +
+              text[index] +
+              textElement.textContent.slice(index + 1);
+            index++;
+            setTimeout(animateText, 130);
+          }
+        };
+
+        setTimeout(animateText, 2000);
+      });
+      // Function to generate content based on voice input
+      async function generateContent(prompt) {
+        if (isSpeaking) return; // Prevent new speech if already speaking
+
+        if (
+          prompt.toLowerCase().includes("time") ||
+          prompt.toLowerCase().includes("date")
+        ) {
+          const now = new Date();
+          const responseText = `Current date and time is ${now.toLocaleDateString()} ${now.toLocaleTimeString()}.`;
+          document.getElementById("result").innerText = responseText;
+          speak(responseText);
+        } else if (prompt.toLowerCase().includes("youtube")) {
+          window.open("https://www.youtube.com", "_blank");
+          speak("Opening youtube...");
+        } else if (prompt.toLowerCase().includes("google")) {
+          window.open("https://www.google.com", "_blank");
+          speak("Opening google...");
+        } else if (
+          prompt.includes("what is your name") ||
+          prompt.includes("who are you")
+        ) {
+          speak(
+            "My name is VADARLY, your voice assistant. I am here to assist you..."
+          );
+        } else if (prompt.includes("calculator")) {
+          window.open("Calculator:///");
+          speak("Opening Calculator...");
+        } else {
+          const result = await model.generateContent(prompt, {
+            max_tokens: 100,
+          }); // Limiting to 100 tokens
+          const response = await result.response;
+          const text = await response.text();
+
+          // Filter out # and * characters
+          const filteredText = text.replace(/[#*]/g, "");
+
+          // Split text into lines
+          const lines = filteredText.split("\n");
+
+          // Set your line limit here for speech
+          const speechLineLimit = 3; // Limit to 3 lines
+
+          // Slice the array to include only the desired number of lines for speech
+          const linesForSpeech = lines.slice(0, speechLineLimit).join("\n");
+
+          // Display all the lines
+          document.getElementById("result").innerText = filteredText;
+
+          // Speak the limited lines
+          speak(linesForSpeech);
+        }
+      }
+
+      function speak(text) {
+        if (isSpeaking) return;
+
+        isSpeaking = true;
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.onend = () => {
+          isSpeaking = false;
+        };
+        window.speechSynthesis.speak(utterance);
+      }
+
+      // Initialize speech recognition
+      const SpeechRecognition =
+        window.SpeechRecognition || window.webkitSpeechRecognition;
+      const recognition = new SpeechRecognition();
+      recognition.lang = "en-US";
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+
+      // Event listener for voice input
+      recognition.addEventListener("result", (event) => {
+        let speechResult = event.results[0][0].transcript;
+
+        // Filter out # and * characters
+        speechResult = speechResult.replace(/[+#*]/g, "");
+
+        document.getElementById(
+          "promptDisplay"
+        ).innerText = `You said: ${speechResult}`;
+        generateContent(speechResult); // Automatically generate content and speak it
+      });
+
+      // Event listener for start button
+      document.getElementById("startBtn").addEventListener("click", () => {
+        document.getElementById("promptDisplay").innerText = "Listening...";
+        recognition.start();
+      });
+
+      // Event listener for stop button
+      document.getElementById("stopBtn").addEventListener("click", () => {
+        window.speechSynthesis.cancel(); // Stop any ongoing speech
+        isSpeaking = false;
+        document.getElementById("promptDisplay").innerText = "Stopped";
+      });
+
+      // Error handling for speech recognition
+      recognition.addEventListener("error", (event) => {
+        document.getElementById(
+          "promptDisplay"
+        ).innerText = `Error occurred: ${event.error}`;
+      });
+    </script>
   </body>
 </html>
