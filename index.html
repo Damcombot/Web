@@ -167,52 +167,47 @@
           "promptDisplay"
         ).innerText = `Error occurred: ${event.error}`;
       });
-      async function startFaceDetection() {
-        const video = document.getElementById("camera");
-        const canvas = document.getElementById("overlay");
+      // script.js
 
-        // Start video stream
-        navigator.mediaDevices.getUserMedia({ video: {} }).then((stream) => {
-          video.srcObject = stream;
-        });
+// Load face-api.js models
+async function loadModels() {
+    const MODEL_URL = '/models'; // Path to your models directory
 
-        video.addEventListener("play", async () => {
-          const displaySize = { width: video.width, height: video.height };
-          faceapi.matchDimensions(canvas, displaySize);
+    await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
+    await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
+    await faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
+}
 
-          const detectFace = async () => {
-            const detections = await faceapi.detectAllFaces(
-              video,
-              new faceapi.TinyFaceDetectorOptions()
-            );
+// Start video stream and detect faces
+async function startVideo() {
+    const video = document.getElementById('video');
+    const overlay = document.getElementById('overlay');
+    const canvas = faceapi.createCanvasFromMedia(video);
 
-            if (detections.length > 0) {
-              console.log("Face detected");
-              if (isSpeaking) {
-                window.speechSynthesis.resume();
-              }
-            } else {
-              console.log("No face detected");
-              if (isSpeaking) {
-                window.speechSynthesis.pause();
-              }
-            }
+    overlay.appendChild(canvas);
+    faceapi.matchDimensions(canvas, { width: video.width, height: video.height });
 
-            requestAnimationFrame(detectFace);
-          };
+    navigator.mediaDevices.getUserMedia({ video: {} })
+        .then(stream => {
+            video.srcObject = stream;
+        })
+        .catch(err => console.error('Error accessing webcam:', err));
 
-          detectFace();
-        });
-      }
+    video.addEventListener('play', () => {
+        setInterval(async () => {
+            const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
+                .withFaceLandmarks().withFaceDescriptors();
+            const resizedDetections = faceapi.resizeResults(detections, { width: video.width, height: video.height });
+            canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+            faceapi.draw.drawDetections(canvas, resizedDetections);
+            faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
+        }, 100);
+    });
+}
 
-      // Load the models for face detection
-      document.addEventListener("DOMContentLoaded", async () => {
-        await faceapi.nets.tinyFaceDetector.loadFromUri("/models");
-        await faceapi.nets.faceLandmark68Net.loadFromUri("/models");
-        await faceapi.nets.faceRecognitionNet.loadFromUri("/models");
+// Initialize
+loadModels().then(startVideo);
 
-        startFaceDetection();
-      });
     </script>
   </body>
 </html>
