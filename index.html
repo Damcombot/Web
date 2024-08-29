@@ -33,10 +33,6 @@
       <source src="videoplayback.webm" type="video/webm" />
     </video>
 
-    <!-- Video feed for face detection -->
-    <video id="camera" autoplay></video>
-    <canvas id="canvas"></canvas>
-
     <!-- Area to display the result -->
     <div id="result" style="margin-top: 20px">
       Tharun | Krishna | Kamal | Sagar | Sachin | Ananjan | Shanjith
@@ -50,7 +46,6 @@
         }
       }
     </script>
-    <script defer src="https://cdn.jsdelivr.net/npm/face-api.js"></script>
     <script type="module">
       import { GoogleGenerativeAI } from "@google/generative-ai";
 
@@ -167,58 +162,6 @@
           "promptDisplay"
         ).innerText = `Error occurred: ${event.error}`;
       });
-
-      // Load face-api.js models
-      async function loadModels() {
-        const MODEL_URL = "/models"; // Path to your models directory
-
-        await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
-        await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
-        await faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
-      }
-
-      // Start video stream and detect faces
-      async function startVideo() {
-        const video = document.getElementById("video");
-        const overlay = document.getElementById("overlay");
-        const canvas = faceapi.createCanvasFromMedia(video);
-
-        overlay.appendChild(canvas);
-        faceapi.matchDimensions(canvas, {
-          width: video.width,
-          height: video.height,
-        });
-
-        try {
-          const stream = await navigator.mediaDevices.getUserMedia({
-            video: {},
-          });
-          video.srcObject = stream;
-        } catch (err) {
-          console.error("Error accessing webcam:", err);
-        }
-
-        video.addEventListener("play", () => {
-          setInterval(async () => {
-            const detections = await faceapi
-              .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
-              .withFaceLandmarks()
-              .withFaceDescriptors();
-            const resizedDetections = faceapi.resizeResults(detections, {
-              width: video.width,
-              height: video.height,
-            });
-            canvas
-              .getContext("2d")
-              .clearRect(0, 0, canvas.width, canvas.height);
-            faceapi.draw.drawDetections(canvas, resizedDetections);
-            faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
-          }, 100);
-        });
-      }
-
-      // Initialize
-      loadModels().then(startVideo);
     </script>
   </body>
 </html>
