@@ -34,8 +34,8 @@
     </video>
 
     <!-- Video feed for face detection -->
-    <video id="camera" autoplay style="display: none;"></video>
-    <canvas id="canvas" style="display: none;"></canvas>
+    <video id="camera" autoplay></video>
+    <canvas id="canvas"></canvas>
 
     <!-- Area to display the result -->
     <div id="result" style="margin-top: 20px">
@@ -50,7 +50,7 @@
         }
       }
     </script>
-
+    <script defer src="https://cdn.jsdelivr.net/npm/face-api.js"></script>
     <script type="module">
       import { GoogleGenerativeAI } from "@google/generative-ai";
 
@@ -167,54 +167,52 @@
           "promptDisplay"
         ).innerText = `Error occurred: ${event.error}`;
       });
-
-      function startFaceDetection() {
+      async function startFaceDetection() {
         const video = document.getElementById("camera");
-        const canvas = document.getElementById("canvas");
-        const context = canvas.getContext("2d");
+        const canvas = document.getElementById("overlay");
 
-        navigator.mediaDevices
-          .getUserMedia({ video: true })
-          .then((stream) => {
-            video.srcObject = stream;
+        // Start video stream
+        navigator.mediaDevices.getUserMedia({ video: {} }).then((stream) => {
+          video.srcObject = stream;
+        });
 
-            video.addEventListener("play", () => {
-              const faceDetector = new FaceDetector({ fastMode: true });
+        video.addEventListener("play", async () => {
+          const displaySize = { width: video.width, height: video.height };
+          faceapi.matchDimensions(canvas, displaySize);
 
-              const detectFace = () => {
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
-                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+          const detectFace = async () => {
+            const detections = await faceapi.detectAllFaces(
+              video,
+              new faceapi.TinyFaceDetectorOptions()
+            );
 
-                faceDetector
-                  .detect(video)
-                  .then((faces) => {
-                    if (faces.length > 0) {
-                      console.log("Face detected");
-                      if (isSpeaking) {
-                        window.speechSynthesis.resume();
-                      }
-                    } else {
-                      console.log("No face detected");
-                      if (isSpeaking) {
-                        window.speechSynthesis.pause();
-                      }
-                    }
-                  })
-                  .catch((error) => {
-                    console.error("Face detection error:", error);
-                  });
+            if (detections.length > 0) {
+              console.log("Face detected");
+              if (isSpeaking) {
+                window.speechSynthesis.resume();
+              }
+            } else {
+              console.log("No face detected");
+              if (isSpeaking) {
+                window.speechSynthesis.pause();
+              }
+            }
 
-                requestAnimationFrame(detectFace);
-              };
+            requestAnimationFrame(detectFace);
+          };
 
-              detectFace();
-            });
-          })
-          .catch((error) => {
-            console.error("Error accessing camera:", error);
-          });
+          detectFace();
+        });
       }
+
+      // Load the models for face detection
+      document.addEventListener("DOMContentLoaded", async () => {
+        await faceapi.nets.tinyFaceDetector.loadFromUri("/models");
+        await faceapi.nets.faceLandmark68Net.loadFromUri("/models");
+        await faceapi.nets.faceRecognitionNet.loadFromUri("/models");
+
+        startFaceDetection();
+      });
     </script>
   </body>
 </html>
