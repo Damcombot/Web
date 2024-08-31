@@ -1,10 +1,11 @@
+<!DOCTYPE html>
 <html>
   <head>
     <link rel="stylesheet" href="0.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Edu+AU+VIC+WA+NT+Hand:wght@400..700&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Space+Grotesk:wght@300..700&family=Syncopate:wght@400;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Lexend+Tera:wght@100..900&display=swap"
       rel="stylesheet"
     />
     <meta charset="UTF-8" />
@@ -18,8 +19,13 @@
     />
   </head>
   <body>
+    <!-- Loader HTML -->
+    <div id="loader" class="loader">
+      <div class="spinner"></div>
+    </div>
+
     <!-- Display project name -->
-     <h1>Vadarly</h1>
+    <h1>Vadarly</h1>
     <iframe
       src="https://my.spline.design/boxeshover-82ce8d1b44c5d7a122ea942b0218ceb6/"
       frameborder="0"
@@ -46,124 +52,153 @@
       }
     </script>
     <script type="module">
-          import { GoogleGenerativeAI } from "@google/generative-ai";
+      import { GoogleGenerativeAI } from "@google/generative-ai";
 
-          const API_KEY = "AIzaSyBx4K2HYyJN13yXRf01tnDh5dQ-XLpzx_k";
-          const genAI = new GoogleGenerativeAI(API_KEY);
-          const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const API_KEY = "AIzaSyBx4K2HYyJN13yXRf01tnDh5dQ-XLpzx_k";
+      const genAI = new GoogleGenerativeAI(API_KEY);
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-          let isSpeaking = false;
+      let isSpeaking = false;
 
-          async function generateContent(prompt) {
-            if (isSpeaking) return;
+      function showLoader() {
+        document.getElementById("loader").classList.add("show");
+      }
 
-            if (
-              prompt.toLowerCase().includes("time") ||
-              prompt.toLowerCase().includes("date")
-            ) {
-              const now = new Date();
-              const responseText = `Current date and time is ${now.toLocaleDateString()} ${now.toLocaleTimeString()}.`;
-              speak(responseText);
-            } else if (prompt.toLowerCase().includes("youtube")) {
-              speak("Opening YouTube...");
-              window.open("https://www.youtube.com", "_blank");
-            } else if (prompt.toLowerCase().includes("google")) {
-              speak("Opening Google...");
-              window.open("https://www.google.com", "_blank");
-            } else if (
-              prompt.includes("what is your name") ||
-              prompt.includes("who are you")
-            ) {
-              speak(
-                "My name is VADARLY, your voice assistant. I am here to assist you..."
-              );
-            } else if (prompt.includes("calculator")) {
-              speak("Opening Calculator...");
-              window.open("Calculator:///");
-            } else {
-              try {
-                const result = await model.generateContent(prompt, {
-                  max_tokens: 100,
-                });
-                const response = await result.response;
-                const text = await response.text();
-                const filteredText = text.replace(/[#*]/g, "");
-                const lines = filteredText.split("\n");
-                const speechLineLimit = 15;
-                const linesForSpeech = lines.slice(0, speechLineLimit);
+      function hideLoader() {
+        setTimeout(() => {
+          document.getElementById("loader").classList.remove("show");
+        }, 20000); // Minimum 2 seconds before hiding
+      }
 
-                speakLines(linesForSpeech);
-              } catch (error) {
-                speak("Sorry, I couldn't process your request.");
-              }
-            }
+      async function generateContent(prompt) {
+        if (isSpeaking) return;
+
+        showLoader(); // Show loader before starting the operation
+
+        if (
+          prompt.toLowerCase().includes("time") ||
+          prompt.toLowerCase().includes("date")
+        ) {
+          const now = new Date();
+          const responseText = `Current date and time is ${now.toLocaleDateString()} ${now.toLocaleTimeString()}.`;
+          speak(responseText);
+          hideLoader(); // Hide loader after operation is complete
+        } else if (prompt.toLowerCase().includes("youtube")) {
+          speak("Opening YouTube...");
+          window.open("https://www.youtube.com", "_blank");
+          hideLoader(); // Hide loader after operation is complete
+        } else if (prompt.toLowerCase().includes("google")) {
+          speak("Opening Google...");
+          window.open("https://www.google.com", "_blank");
+          hideLoader(); // Hide loader after operation is complete
+        } else if (
+          prompt.includes("what is your name") ||
+          prompt.includes("who are you")
+        ) {
+          speak(
+            "My name is VADARLY, your voice assistant. I am here to assist you..."
+          );
+          hideLoader(); // Hide loader after operation is complete
+        } else if (prompt.includes("calculator")) {
+          speak("Opening Calculator...");
+          window.open("Calculator:///");
+          hideLoader(); // Hide loader after operation is complete
+        } else {
+          try {
+            const result = await model.generateContent(prompt, {
+              max_tokens: 100,
+            });
+            const response = await result.response;
+            const text = await response.text();
+            const filteredText = text.replace(/[#*]/g, "");
+            const lines = filteredText.split("\n");
+            const speechLineLimit = 15;
+            const linesForSpeech = lines.slice(0, speechLineLimit);
+
+            speakLines(linesForSpeech);
+          } catch (error) {
+            speak("Sorry, I couldn't process your request.");
+          } finally {
+            hideLoader(); // Ensure loader is hidden even if an error occurs
           }
+        }
+      }
 
-          function speakLines(lines) {
-            if (lines.length === 0) {
-              isSpeaking = false;
-              return;
-            }
+      function speakLines(lines) {
+        if (lines.length === 0) {
+          isSpeaking = false;
+          return;
+        }
 
-            const line = lines.shift(); // Get the first line and remove it from the array
-            document.getElementById("result").innerText = line;
+        const line = lines.shift(); // Get the first line and remove it from the array
+        document.getElementById("result").innerText = line;
 
-            const utterance = new SpeechSynthesisUtterance(line);
-            utterance.rate = 1.2; // Adjust rate as needed
-            utterance.onend = () => {
-              speakLines(lines); // Continue with the next line
-            };
+        const utterance = new SpeechSynthesisUtterance(line);
+        utterance.rate = 1.2; // Adjust rate as needed
+        utterance.onend = () => {
+          speakLines(lines); // Continue with the next line
+        };
 
-            window.speechSynthesis.speak(utterance);
-            isSpeaking = true;
-          }
+        window.speechSynthesis.speak(utterance);
+        isSpeaking = true;
+      }
 
-          function speak(text) {
-            if (isSpeaking) return;
+      function speak(text) {
+        if (isSpeaking) return;
 
-            isSpeaking = true;
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.rate = 1.2; // Adjust rate as needed
-            utterance.onend = () => {
-              isSpeaking = false;
-            };
-            window.speechSynthesis.speak(utterance);
-          }
+        isSpeaking = true;
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 1.2; // Adjust rate as needed
+        utterance.onend = () => {
+          isSpeaking = false;
+        };
+        window.speechSynthesis.speak(utterance);
+      }
 
-          const SpeechRecognition =
-            window.SpeechRecognition || window.webkitSpeechRecognition;
-          const recognition = new SpeechRecognition();
-          recognition.lang = "en-US";
-          recognition.interimResults = false;
-          recognition.maxAlternatives = 1;
+      const SpeechRecognition =
+        window.SpeechRecognition || window.webkitSpeechRecognition;
+      const recognition = new SpeechRecognition();
+      recognition.lang = "en-US";
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
 
-          recognition.addEventListener("result", (event) => {
-            let speechResult = event.results[0][0].transcript;
-            speechResult = speechResult.replace(/[+#*]/g, "");
-            document.getElementById("promptDisplay").innerText = `You said: ${speechResult}`;
-            generateContent(speechResult);
-          });
+      recognition.addEventListener("result", (event) => {
+        let speechResult = event.results[0][0].transcript;
+        speechResult = speechResult.replace(/[+#*]/g, "");
+        document.getElementById(
+          "promptDisplay"
+        ).innerText = `You said: ${speechResult}`;
+        generateContent(speechResult);
+      });
 
-          document.getElementById("startBtn").addEventListener("click", () => {
-            document.getElementById("promptDisplay").innerText = "Listening...";
-            recognition.start();
-          });
+      document.getElementById("startBtn").addEventListener("click", () => {
+        document.getElementById("promptDisplay").innerText = "Listening...";
+        recognition.start();
+      });
 
-          document.getElementById("stopBtn").addEventListener("click", () => {
-            window.speechSynthesis.cancel();
-            isSpeaking = false;
-            document.getElementById("promptDisplay").innerText = "Stopped";
-          });
+      document.getElementById("stopBtn").addEventListener("click", () => {
+        window.speechSynthesis.cancel();
+        isSpeaking = false;
+        document.getElementById("promptDisplay").innerText = "Stopped";
+      });
 
-          recognition.addEventListener("error", (event) => {
-            document.getElementById(
-              "promptDisplay"
-            ).innerText = `Error occurred: ${event.error}`;
-          });
-          window.addEventListener("beforeunload", () => {
-              window.speechSynthesis.cancel();
-               isSpeaking = false;
-          })
+      recognition.addEventListener("error", (event) => {
+        document.getElementById(
+          "promptDisplay"
+        ).innerText = `Error occurred: ${event.error}`;
+      });
+
+      window.addEventListener("beforeunload", () => {
+        window.speechSynthesis.cancel();
+        isSpeaking = false;
+      });
+
+      // Hide loader on page load after a delay
+      window.addEventListener("load", () => {
+        setTimeout(() => {
+          hideLoader();
+        }, 2000); // Ensure minimum display of loader on initial load
+      });
     </script>
   </body>
 </html>
