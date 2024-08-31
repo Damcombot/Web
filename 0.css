@@ -101,7 +101,7 @@ body {
       display: grid;
       flex-direction: column;
     }
-    #result,#promptDisplay{
+   #promptDisplay{
       visibility: hidden;
     }
     #result {
