@@ -1,6 +1,6 @@
 <html>
   <head>
-    <link rel="stylesheet" href="9.css" />
+    <link rel="stylesheet" href="0.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -19,24 +19,23 @@
   </head>
   <body>
     <!-- Display project name -->
-    <h1 id="animated-text">@#%^*~&</h1>
-
+     <h1>Vadarly</h1>
+    <iframe
+      src="https://my.spline.design/boxeshover-82ce8d1b44c5d7a122ea942b0218ceb6/"
+      frameborder="0"
+      width="100%"
+      height="600px"
+      style="z-index: 0"
+    ></iframe>
+    <div id="promptDisplay" style="margin-top: 30px"></div>
     <!-- Buttons for voice input and stopping -->
     <div class="niu">
       <button id="startBtn">Speak</button>
       <button id="stopBtn">Stop</button>
-      <p id="promptDisplay">
-        I'm Vadarly, a voice assistant. How may I help you?
-      </p>
     </div>
-    <video autoplay muted loop id="bg-video">
-      <source src="videoplayback.webm" type="video/webm" />
-    </video>
 
     <!-- Area to display the result -->
-    <div id="result" style="margin-top: 20px">
-      Tharun | Krishna | Kamal | Sagar | Sachin | Ananjan | Shanjith
-    </div>
+    <div id="result" style="margin-top: 20px"></div>
 
     <!-- Import @google/generative-ai -->
     <script type="importmap">
@@ -47,121 +46,124 @@
       }
     </script>
     <script type="module">
-      import { GoogleGenerativeAI } from "@google/generative-ai";
+          import { GoogleGenerativeAI } from "@google/generative-ai";
 
-      const API_KEY = "AIzaSyBx4K2HYyJN13yXRf01tnDh5dQ-XLpzx_k";
-      const genAI = new GoogleGenerativeAI(API_KEY);
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+          const API_KEY = "AIzaSyBx4K2HYyJN13yXRf01tnDh5dQ-XLpzx_k";
+          const genAI = new GoogleGenerativeAI(API_KEY);
+          const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-      let isSpeaking = false;
+          let isSpeaking = false;
 
-      document.addEventListener("DOMContentLoaded", () => {
-        const textElement = document.getElementById("animated-text");
-        const text = "VADARLY";
-        let index = 0;
+          async function generateContent(prompt) {
+            if (isSpeaking) return;
 
-        const animateText = () => {
-          if (index < text.length) {
-            textElement.textContent =
-              textElement.textContent.slice(0, index) +
-              text[index] +
-              textElement.textContent.slice(index + 1);
-            index++;
-            setTimeout(animateText, 130);
+            if (
+              prompt.toLowerCase().includes("time") ||
+              prompt.toLowerCase().includes("date")
+            ) {
+              const now = new Date();
+              const responseText = `Current date and time is ${now.toLocaleDateString()} ${now.toLocaleTimeString()}.`;
+              speak(responseText);
+            } else if (prompt.toLowerCase().includes("youtube")) {
+              speak("Opening YouTube...");
+              window.open("https://www.youtube.com", "_blank");
+            } else if (prompt.toLowerCase().includes("google")) {
+              speak("Opening Google...");
+              window.open("https://www.google.com", "_blank");
+            } else if (
+              prompt.includes("what is your name") ||
+              prompt.includes("who are you")
+            ) {
+              speak(
+                "My name is VADARLY, your voice assistant. I am here to assist you..."
+              );
+            } else if (prompt.includes("calculator")) {
+              speak("Opening Calculator...");
+              window.open("Calculator:///");
+            } else {
+              try {
+                const result = await model.generateContent(prompt, {
+                  max_tokens: 100,
+                });
+                const response = await result.response;
+                const text = await response.text();
+                const filteredText = text.replace(/[#*]/g, "");
+                const lines = filteredText.split("\n");
+                const speechLineLimit = 15;
+                const linesForSpeech = lines.slice(0, speechLineLimit);
+
+                speakLines(linesForSpeech);
+              } catch (error) {
+                speak("Sorry, I couldn't process your request.");
+              }
+            }
           }
-        };
 
-        setTimeout(animateText, 2000);
+          function speakLines(lines) {
+            if (lines.length === 0) {
+              isSpeaking = false;
+              return;
+            }
 
-        // Start face detection
-        startFaceDetection();
-      });
+            const line = lines.shift(); // Get the first line and remove it from the array
+            document.getElementById("result").innerText = line;
 
-      async function generateContent(prompt) {
-        if (isSpeaking) return;
+            const utterance = new SpeechSynthesisUtterance(line);
+            utterance.rate = 1.2; // Adjust rate as needed
+            utterance.onend = () => {
+              speakLines(lines); // Continue with the next line
+            };
 
-        if (
-          prompt.toLowerCase().includes("time") ||
-          prompt.toLowerCase().includes("date")
-        ) {
-          const now = new Date();
-          const responseText = `Current date and time is ${now.toLocaleDateString()} ${now.toLocaleTimeString()}.`;
-          document.getElementById("result").innerText = responseText;
-          speak(responseText);
-        } else if (prompt.toLowerCase().includes("youtube")) {
-          window.open("https://www.youtube.com", "_blank");
-          speak("Opening youtube...");
-        } else if (prompt.toLowerCase().includes("google")) {
-          window.open("https://www.google.com", "_blank");
-          speak("Opening google...");
-        } else if (
-          prompt.includes("what is your name") ||
-          prompt.includes("who are you")
-        ) {
-          speak(
-            "My name is VADARLY, your voice assistant. I am here to assist you..."
-          );
-        } else if (prompt.includes("calculator")) {
-          window.open("Calculator:///");
-          speak("Opening Calculator...");
-        } else {
-          const result = await model.generateContent(prompt, {
-            max_tokens: 100,
+            window.speechSynthesis.speak(utterance);
+            isSpeaking = true;
+          }
+
+          function speak(text) {
+            if (isSpeaking) return;
+
+            isSpeaking = true;
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = 1.2; // Adjust rate as needed
+            utterance.onend = () => {
+              isSpeaking = false;
+            };
+            window.speechSynthesis.speak(utterance);
+          }
+
+          const SpeechRecognition =
+            window.SpeechRecognition || window.webkitSpeechRecognition;
+          const recognition = new SpeechRecognition();
+          recognition.lang = "en-US";
+          recognition.interimResults = false;
+          recognition.maxAlternatives = 1;
+
+          recognition.addEventListener("result", (event) => {
+            let speechResult = event.results[0][0].transcript;
+            speechResult = speechResult.replace(/[+#*]/g, "");
+            document.getElementById("promptDisplay").innerText = `You said: ${speechResult}`;
+            generateContent(speechResult);
           });
-          const response = await result.response;
-          const text = await response.text();
-          const filteredText = text.replace(/[#*]/g, "");
-          const lines = filteredText.split("\n");
-          const speechLineLimit = 5;
-          const linesForSpeech = lines.slice(0, speechLineLimit).join("\n");
-          document.getElementById("result").innerText = filteredText;
-          speak(linesForSpeech);
-        }
-      }
 
-      function speak(text) {
-        if (isSpeaking) return;
+          document.getElementById("startBtn").addEventListener("click", () => {
+            document.getElementById("promptDisplay").innerText = "Listening...";
+            recognition.start();
+          });
 
-        isSpeaking = true;
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.onend = () => {
-          isSpeaking = false;
-        };
-        window.speechSynthesis.speak(utterance);
-      }
+          document.getElementById("stopBtn").addEventListener("click", () => {
+            window.speechSynthesis.cancel();
+            isSpeaking = false;
+            document.getElementById("promptDisplay").innerText = "Stopped";
+          });
 
-      const SpeechRecognition =
-        window.SpeechRecognition || window.webkitSpeechRecognition;
-      const recognition = new SpeechRecognition();
-      recognition.lang = "en-US";
-      recognition.interimResults = false;
-      recognition.maxAlternatives = 1;
-
-      recognition.addEventListener("result", (event) => {
-        let speechResult = event.results[0][0].transcript;
-        speechResult = speechResult.replace(/[+#*]/g, "");
-        document.getElementById(
-          "promptDisplay"
-        ).innerText = `You said: ${speechResult}`;
-        generateContent(speechResult);
-      });
-
-      document.getElementById("startBtn").addEventListener("click", () => {
-        document.getElementById("promptDisplay").innerText = "Listening...";
-        recognition.start();
-      });
-
-      document.getElementById("stopBtn").addEventListener("click", () => {
-        window.speechSynthesis.cancel();
-        isSpeaking = false;
-        document.getElementById("promptDisplay").innerText = "Stopped";
-      });
-
-      recognition.addEventListener("error", (event) => {
-        document.getElementById(
-          "promptDisplay"
-        ).innerText = `Error occurred: ${event.error}`;
-      });
+          recognition.addEventListener("error", (event) => {
+            document.getElementById(
+              "promptDisplay"
+            ).innerText = `Error occurred: ${event.error}`;
+          });
+          window.addEventListener("beforeunload", () => {
+              window.speechSynthesis.cancel();
+               isSpeaking = false;
+          })
     </script>
   </body>
 </html>
