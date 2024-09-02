@@ -145,8 +145,11 @@
           window.open("Calculator:///");
           // hideLoader(); // Hide loader after operation is complete
         } else if (
-          prompt.toLowerCase().includes("generate") ||
-          prompt.toLowerCase().includes("create")
+          prompt.toLowerCase().includes("generate image") ||
+          prompt.toLowerCase().includes("create image") ||
+          prompt.toLowerCase().includes("create a image")  ||
+          prompt.toLowerCase().includes("generate a image") ||
+          prompt.toLowerCase().includes("give me the image")
         ) {
           speak("Generating image...");
           await generateImage(prompt);
