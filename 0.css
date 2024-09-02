@@ -69,7 +69,7 @@ h1 {
 }
 @media screen and (max-width: 1000px) {
   iframe {
-    transform: scale(1.5); /* Scale iframe for smaller screens */
+    transform: scale(2); /* Scale iframe for smaller screens */
   }
 
   h1 {
