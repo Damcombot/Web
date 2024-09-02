@@ -35,9 +35,16 @@ iframe {
 #promptDisplay {
   justify-content: center;
   position: absolute;
-  bottom: 0px;
+  bottom: 15px;
 }
-
+.omn{
+  position:fixed;
+  left:10px;
+  bottom:10px;
+  z-index:90000;
+  font-size: 2em;
+  font-family: "Lexend tera";
+}
 p,
 div {
   margin: 10px;
@@ -69,11 +76,8 @@ h1 {
 }
 @media screen and (max-width: 1000px) {
   iframe {
-    transform: scale(2); /* Scale iframe for smaller screens */
-  }
-
-  h1 {
-    font-size: 3em; /* Adjust font size */
+    transform: scale(1.5);
+    visibility: hidden; /* Scale iframe for smaller screens */
   }
 
   button {
@@ -86,12 +90,10 @@ h1 {
   iframe {
     transform: scale(1.2); /* Further scale iframe for tablets */
   }
-  .oln{
-    visibility: visible;
+  .omn{
+    font-size: 1.4em;
   }
-  h1 {
-    font-size: 2.5em;
-  }
+
 
   button {
     font-size: 0.8rem;
@@ -108,10 +110,6 @@ h1 {
   iframe {
     transform: scale(1);
     width: 100%; /* Ensure full-width iframe on small screens */
-  }
-
-  h1 {
-    font-size: 2em;
   }
 
   button {
