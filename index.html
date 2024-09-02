@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <link rel="stylesheet" href="0.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -19,8 +19,8 @@
     />
   </head>
   <body>
-   <!-- Display project name -->
-    <h1>Vadarly</h1>
+    <!-- Display project name -->
+    <h1 class="oln">Vadarly</h1>
     <iframe
       src="https://my.spline.design/boxeshover-82ce8d1b44c5d7a122ea942b0218ceb6/"
       frameborder="0"
@@ -28,15 +28,19 @@
       height="600px"
       style="z-index: 0"
     ></iframe>
+
     <div id="promptDisplay" style="margin-top: 30px"></div>
+
     <!-- Buttons for voice input and stopping -->
     <div class="niu">
       <button id="startBtn">Speak</button>
       <button id="stopBtn">Stop</button>
     </div>
 
-    <!-- Area to display the result -->
-    <div id="result" style="margin-top: 20px"></div>
+    <!-- Area to display the generated image -->
+    <div id="result" style="margin-top: 20px">
+      <img id="generatedImage" src="" alt="" />
+    </div>
 
     <!-- Import @google/generative-ai -->
     <script type="importmap">
@@ -48,27 +52,69 @@
     </script>
     <script type="module">
       import { GoogleGenerativeAI } from "@google/generative-ai";
-
       const API_KEY = "AIzaSyBx4K2HYyJN13yXRf01tnDh5dQ-XLpzx_k";
       const genAI = new GoogleGenerativeAI(API_KEY);
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
       let isSpeaking = false;
 
-      function showLoader() {
-        document.getElementById("loader").classList.add("show");
+      // Function to generate image using the provided prompt
+
+      async function generateImage(prompt) {
+        if (!prompt) {
+          alert("Please enter a prompt");
+          return;
+        }
+
+        const API_KEY1 = "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";
+        const API_URL1 =
+          "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0";
+
+        try {
+          const response = await fetch(API_URL1, {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${API_KEY1}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              inputs: prompt,
+              options: {
+                wait_for_model: true,
+              },
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error("Failed to generate image");
+          }
+
+          const imageBlob = await response.blob();
+          const imageUrl = URL.createObjectURL(imageBlob);
+
+          let generatedImageElement = document.getElementById("generatedImage");
+          if (generatedImageElement) {
+            generatedImageElement.src = imageUrl;
+          } else {
+            generatedImageElement = document.createElement("img");
+            generatedImageElement.id = "generatedImage";
+            generatedImageElement.src = imageUrl;
+            document
+              .getElementById("result")
+              .appendChild(generatedImageElement);
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          alert("There was an error generating the image.");
+        }
       }
 
-      function hideLoader() {
-        setTimeout(() => {
-          document.getElementById("loader").classList.remove("show");
-        }, 20000); // Minimum 2 seconds before hiding
-      }
+      // Updated generateContent function to include image generation
 
       async function generateContent(prompt) {
         if (isSpeaking) return;
 
-        showLoader(); // Show loader before starting the operation
+        // showLoader(); // Show loader before starting the operation
 
         if (
           prompt.toLowerCase().includes("time") ||
@@ -77,15 +123,15 @@
           const now = new Date();
           const responseText = `Current date and time is ${now.toLocaleDateString()} ${now.toLocaleTimeString()}.`;
           speak(responseText);
-          hideLoader(); // Hide loader after operation is complete
+          // hideLoader(); // Hide loader after operation is complete
         } else if (prompt.toLowerCase().includes("youtube")) {
           speak("Opening YouTube...");
           window.open("https://www.youtube.com", "_blank");
-          hideLoader(); // Hide loader after operation is complete
+          // hideLoader(); // Hide loader after operation is complete
         } else if (prompt.toLowerCase().includes("google")) {
           speak("Opening Google...");
           window.open("https://www.google.com", "_blank");
-          hideLoader(); // Hide loader after operation is complete
+          // hideLoader(); // Hide loader after operation is complete
         } else if (
           prompt.includes("what is your name") ||
           prompt.includes("who are you")
@@ -93,11 +139,19 @@
           speak(
             "My name is VADARLY, your voice assistant. I am here to assist you..."
           );
-          hideLoader(); // Hide loader after operation is complete
+          // hideLoader(); // Hide loader after operation is complete
         } else if (prompt.includes("calculator")) {
           speak("Opening Calculator...");
           window.open("Calculator:///");
-          hideLoader(); // Hide loader after operation is complete
+          // hideLoader(); // Hide loader after operation is complete
+        } else if (
+          prompt.toLowerCase().includes("generate") ||
+          prompt.toLowerCase().includes("create")
+        ) {
+          speak("Generating image...");
+          await generateImage(prompt);
+
+          // hideLoader(); // Hide loader after operation is complete
         } else {
           try {
             const result = await model.generateContent(prompt, {
@@ -114,7 +168,7 @@
           } catch (error) {
             speak("Sorry, I couldn't process your request.");
           } finally {
-            hideLoader(); // Ensure loader is hidden even if an error occurs
+            // hideLoader(); // Ensure loader is hidden even if an error occurs
           }
         }
       }
@@ -125,15 +179,12 @@
           return;
         }
 
-        const line = lines.shift(); // Get the first line and remove it from the array
+        const line = lines.shift();
         document.getElementById("result").innerText = line;
 
         const utterance = new SpeechSynthesisUtterance(line);
-        utterance.rate = 1.2; // Adjust rate as needed
-        utterance.onend = () => {
-          speakLines(lines); // Continue with the next line
-        };
-
+        utterance.rate = 1.2;
+        utterance.onend = () => speakLines(lines);
         window.speechSynthesis.speak(utterance);
         isSpeaking = true;
       }
@@ -143,10 +194,8 @@
 
         isSpeaking = true;
         const utterance = new SpeechSynthesisUtterance(text);
-        utterance.rate = 1.2; // Adjust rate as needed
-        utterance.onend = () => {
-          isSpeaking = false;
-        };
+        utterance.rate = 1.2;
+        utterance.onend = () => (isSpeaking = false);
         window.speechSynthesis.speak(utterance);
       }
 
@@ -186,13 +235,6 @@
       window.addEventListener("beforeunload", () => {
         window.speechSynthesis.cancel();
         isSpeaking = false;
-      });
-
-      // Hide loader on page load after a delay
-      window.addEventListener("load", () => {
-        setTimeout(() => {
-          hideLoader();
-        }, 2000); // Ensure minimum display of loader on initial load
       });
     </script>
   </body>
