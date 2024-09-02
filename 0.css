@@ -1,197 +1,197 @@
-/* Apply a black background to the entire page */
-
 @import url("https://fonts.googleapis.com/css?family=Manrope:700|Manrope:400");
 @import url("https://fonts.googleapis.com/css?family=Lexend+Tera:wght@100..900&display=swap");
+
 body {
-    background-color: black;
-    color: white;
-    font-family:"Manrope";
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    overflow: hidden;
+  background-color: black;
+  color: white;
+  font-family: "Manrope";
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  overflow: hidden;
+}
+
+iframe {
+  position: fixed;
+  transform: scale(1);
+  min-width: 100%;
+  min-height: 130%;
+  width: auto;
+  height: auto;
+  margin: 10px;
+  transition: transform 0.5s ease;
+}
+
+.niu,
+#result,
+#promptDisplay {
+  z-index: 99;
+}
+
+#promptDisplay {
+  justify-content: center;
+  position: absolute;
+  bottom: 0px;
+}
+
+p,
+div {
+  margin: 10px;
+  padding: 15px;
+  border-radius: 12px;
+  background: none;
+  width: 80%;
+  max-width: 50vw;
+  text-align: center;
+  justify-content: right;
+  align-items: center;
+}
+
+h1 {
+  font-size: 4em;
+  margin: 0;
+  justify-content: center;
+  padding: 20px;
+  top: 0%;
+  z-index: 6;
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(89, 89, 89, 0.6);
+  text-align: center;
+}
+@media screen and (min-width: 1001px){
+  .oln{
+    visibility: hidden;
   }
-  
-  /* Full-screen background video */
+}
+@media screen and (max-width: 1000px) {
   iframe {
-    position: fixed;
-    transform: scale(1);
-    min-width: 100%;
-    min-height: 130%;
-    width: auto;
-    height: auto;
-    margin: 10px;
-    transition: transform 0.5s ease; /* Smooth transition for scaling */
+    transform: scale(1.5); /* Scale iframe for smaller screens */
   }
-  
-  .niu,
-  #result,
-  #promptDisplay {
-    z-index: 99;
-  }
-  #promptDisplay {
-    justify-content: center;
-    position: absolute;
-    bottom: 0px;
-  }
-  
-  /* Style the button */
-  
-  /* Style for the text display areas */
-  p,
-  div {
-    margin: 10px;
-    padding: 15px;
-    border-radius: 12px;
-    background: none;
-    width: 80%;
-    max-width: 50vw;
-    text-align: center;
-    justify-content: right;
-    align-items: center;
-  }
-  
-  /* Displaying the project name prominently */
+
   h1 {
-    font-size: 4em;
-    margin: 0;
-    justify-content: center;
-    padding: 20px;
-    top:0%;
-    z-index: 6;
-    color: #ffffff;
-    text-shadow: 2px 2px 4px rgba(89, 89, 89, 0.6);
-    text-align: center; /* Center align the title */
+    font-size: 3em; /* Adjust font size */
   }
-  @media screen and (max-width: 900900px){
-    h1{
-      visibility: hidden;
-    }
+
+  button {
+    font-size: 0.9rem; /* Adjust button size */
+    padding: 0.4rem 0.8rem;
   }
-  @media screen and (max-width: 1000px) {
-    iframe {
-      transform: scale(1.8); /* Scale down iframe */
-    }
-    :root {
-      --m: 1rem;
-    }
-    p,
-    div {
-      justify-content: center;
-    }
-    .niu {
-      right: 0;
-    }
-    h1{
-      visibility:visible;
-    }
+}
+
+@media screen and (max-width: 768px) {
+  iframe {
+    transform: scale(1.2); /* Further scale iframe for tablets */
+  }
+  .oln{
+    visibility: visible;
+  }
+  h1 {
+    font-size: 2.5em;
+  }
+
+  button {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.7rem;
+  }
+
+  #generatedImage {
+    max-width: 250px; /* Adjust image size */
+    max-height: 250px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  iframe {
+    transform: scale(1);
+    width: 100%; /* Ensure full-width iframe on small screens */
+  }
+
+  h1 {
+    font-size: 2em;
+  }
+
+  button {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.6rem;
+  }
+
+  #generatedImage {
+    max-width: 200px; /* Smaller image for very small screens */
+    max-height: 200px;
+  }
+
+  #promptDisplay {
+    visibility: hidden;
   }
   
-  @media screen and (max-width: 500px) {
-    iframe {
-      transform: scale(1);
-      width: 100%;/* Further scale down iframe for small screens */
-    }
-
-    div {
-      display: grid;
-      flex-direction: column;
-    }
-   #promptDisplay{
-      visibility: hidden;
-    }
-    #result {
-      max-height: max-content;
-    }
-  }
-
-  /* Result display */
   #result {
-    white-space: pre-wrap; /* Preserve line breaks */
-    overflow-y: auto; /* Allow scrolling if content overflows */
-    max-height: 60vh; /* Restrict height to 60% of viewport height */
-    margin-top: 20px; /* Ensure consistent spacing from the top */
-    font-size: 1em;
-    padding: 0;
-    right: 0;
-    position: absolute;
-    margin-right: 0;
-    top: 0; /* Keep in the normal flow */
+    max-height: max-content;
   }
-  
-  .niu {
-    display: flex;
-    right: 4%;
-    bottom: 0;
-    position: absolute;
-    padding-right: 0;
-    margin-right: 0;
-  }
-  
-  /* Additional styling for `p` inside the result area */
-  #result p {
-    font-size: 1em;
-  }
-  
-  /* Ensure buttons are displayed correctly and in place */
-  button {
-    margin: 6px; /* Add margin to ensure spacing between buttons and other elements */
-  }
-  
-  /* Prevent content from affecting the layout */
-  * {
-    box-sizing: border-box;
-  }
-  
-  :root {
-    /*  change this for scaling  */
-    --m: 1.2rem;
-  
-    --red: #ff6565;
-    --pink: #ff64f9;
-    --purple: #6b5fff;
-    --blue: #4d8aff;
-    --green: #5bff89;
-    --yellow: #ffee55;
-    --orange: #ff6d1b;
-  }
-  
-  button {
-    border: calc(0.08 * var(--m)) solid transparent;
-    position: relative;
-    color: #f3f3f3;
-    font-size: var(--m);
-    border-radius: calc(0.7 * var(--m));
-    padding: calc(0.5 * var(--m)) calc(1 * var(--m));
-    display: flex;
-    justify-content: center;
-    cursor: pointer;
-    font-family: 'Manrope';
-    background: linear-gradient(#000000, #000000),
-      linear-gradient(#121213 50%, rgba(18, 18, 19, 0.6) 80%, rgba(18, 18, 19, 0)),
-      linear-gradient(
-        90deg,
-        var(--orange),
-        var(--yellow),
-        var(--green),
-        var(--blue),
-        var(--purple),
-        var(--pink),
-        var(--red)
-      );
-    background-origin: border-box;
-    background-clip: padding-box, border-box, border-box;
-    background-size: 200%;
-    animation: animate 8s infinite linear;
-  }
-  
-  button::before {
-    content: "";
-    background: linear-gradient(
+}
+
+#result {
+  white-space: pre-wrap;
+  overflow-y: auto;
+  max-height: 100%;
+  margin-top: 20px;
+  font-size: 1em;
+  padding: 0;
+  right: 0;
+  position: absolute;
+  margin-right: 0;
+  top: 0;
+}
+
+.niu {
+  display: flex;
+  right: 4%;
+  bottom: 0;
+  position: absolute;
+  padding-right: 0;
+  margin-right: 0;
+}
+
+#result p {
+  font-size: 1em;
+}
+
+button {
+  margin: 6px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --m: 1.2rem;
+  --red: #ff6565;
+  --pink: #ff64f9;
+  --purple: #6b5fff;
+  --blue: #4d8aff;
+  --green: #5bff89;
+  --yellow: #ffee55;
+  --orange: #ff6d1b;
+}
+
+button {
+  border: calc(0.08 * var(--m)) solid transparent;
+  position: relative;
+  color: #f3f3f3;
+  font-size: var(--m);
+  border-radius: calc(0.7 * var(--m));
+  padding: calc(0.5 * var(--m)) calc(1 * var(--m));
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  font-family: "Manrope";
+  background: linear-gradient(#000000, #000000),
+    linear-gradient(#121213 50%, rgba(18, 18, 19, 0.6) 80%, rgba(18, 18, 19, 0)),
+    linear-gradient(
       90deg,
       var(--orange),
       var(--yellow),
@@ -201,27 +201,66 @@ body {
       var(--pink),
       var(--red)
     );
-    height: 60%;
-    width: 60%;
-    position: absolute;
-    bottom: 0%;
-    z-index: -5;
-    background-size: 250%;
-    animation: animate 4s infinite linear;
-    filter: blur(calc(0.8 * var(--m)));
+  background-origin: border-box;
+  background-clip: padding-box, border-box, border-box;
+  background-size: 200%;
+  animation: animate 8s infinite linear;
+}
+
+button::before {
+  content: "";
+  background: linear-gradient(
+    90deg,
+    var(--orange),
+    var(--yellow),
+    var(--green),
+    var(--blue),
+    var(--purple),
+    var(--pink),
+    var(--red)
+  );
+  height: 60%;
+  width: 60%;
+  position: absolute;
+  bottom: 0%;
+  z-index: -5;
+  background-size: 250%;
+  animation: animate 4s infinite linear;
+  filter: blur(calc(0.8 * var(--m)));
+}
+
+button:hover,
+button:hover::before {
+  animation: animate 0.5s infinite linear;
+}
+
+@keyframes animate {
+  0% {
+    background-position: 0;
   }
-  
-  button:hover,
-  button:hover::before {
-    animation: animate 0.5s infinite linear;
+  100% {
+    background-position: 200%;
   }
-  
-  @keyframes animate {
-    0% {
-      background-position: 0;
-    }
-    100% {
-      background-position: 200%;
-    }
+}
+
+#generatedImage {
+  max-width: 300px;
+  max-height: 300px;
+  left: 10px;
+  top: 10px;
+  position: fixed;
+}
+
+@media screen and (max-width: 400px) {
+  #generatedImage {
+    max-width: 180px;
+    max-height: 180px;
+    left: 5px;
+    top: 5px;
   }
-  
+
+  button {
+    font-size: 0.6rem;
+    padding: 0.2rem 0.5rem;
+  }
+}
