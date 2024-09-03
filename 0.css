@@ -134,6 +134,7 @@ h1 {
   overflow-y: auto;
   max-height: 100%;
   margin-top: 20px;
+  max-width:50%;
   font-size: 1em;
   padding: 0;
   right: 0;
@@ -240,13 +241,17 @@ button:hover::before {
 }
 
 #generatedImage {
-  max-width: 300px;
-  max-height: 300px;
+
   left: 10px;
   top: 10px;
   position: fixed;
 }
-
+@media screen and (min-width: 769px){
+  #generatedImage {
+      max-width: 300px;
+      max-height: 300px;
+  }
+}
 @media screen and (max-width: 400px) {
   #generatedImage {
     max-width: 180px;
