@@ -2,7 +2,7 @@
 @import url("https://fonts.googleapis.com/css?family=Lexend+Tera:wght@100..900&display=swap");
 
 body {
-  background-color: black;
+  background-image:linear-gradient(to left,rgb(22, 22, 22),black);
   color: white;
   font-family: "Manrope";
   margin: 0;
@@ -42,8 +42,9 @@ iframe {
   left:10px;
   bottom:10px;
   z-index:90000;
-  font-size: 2em;
+  font-size: 3em;
   font-family: "Lexend tera";
+  text-shadow: 0 0 32px white;
 }
 p,
 div {
@@ -179,13 +180,13 @@ button {
 
 :root {
   --m: 1.2rem;
-  --red: #ff6565;
-  --pink: #ff64f9;
-  --purple: #6b5fff;
-  --blue: #4d8aff;
-  --green: #5bff89;
-  --yellow: #ffee55;
-  --orange: #ff6d1b;
+  --red: #6d6d6d;
+  --pink: #ffffff;
+  --purple: #cecece;
+  --blue: #aaaaaa;
+  --green: #4b4b4b;
+  --yellow: #282828;
+  --orange: #000000;
 }
 
 button {
@@ -276,7 +277,7 @@ button:hover::before {
 
   button {
     font-size: 0.7rem;
-    padding: 0.4rem 0.6rem;
+    padding: 0.5rem 0.6rem;
   }
   #result{
     min-width:100%;
