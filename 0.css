@@ -276,6 +276,9 @@ button:hover::before {
 
   button {
     font-size: 0.7rem;
-    padding: 0.25rem 0.6rem;
+    padding: 0.4rem 0.6rem;
+  }
+  #result{
+    min-width:100%;
   }
 }
