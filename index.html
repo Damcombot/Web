@@ -31,6 +31,17 @@
 
     <div id="promptDisplay"></div>
 
+    <!-- Text input box for manual input -->
+    <div class="niu1">
+      <input
+        type="text"
+        id="textInput"
+        placeholder="Type your prompt here..."
+        style="padding: 10px; width: 300px; font-size: 16px"
+      />
+      <button id="textSubmitBtn">Submit</button>
+    </div>
+
     <!-- Buttons for voice input and stopping -->
     <div class="niu">
       <button id="startBtn">Speak</button>
@@ -59,7 +70,6 @@
       let isSpeaking = false;
 
       // Function to generate image using the provided prompt
-
       async function generateImage(prompt) {
         if (!prompt) {
           alert("Please enter a prompt");
@@ -110,11 +120,8 @@
       }
 
       // Updated generateContent function to include image generation
-
       async function generateContent(prompt) {
         if (isSpeaking) return;
-
-        // showLoader(); // Show loader before starting the operation
 
         if (
           prompt.toLowerCase().includes("time") ||
@@ -123,15 +130,12 @@
           const now = new Date();
           const responseText = `Current date and time is ${now.toLocaleDateString()} ${now.toLocaleTimeString()}.`;
           speak(responseText);
-          // hideLoader(); // Hide loader after operation is complete
         } else if (prompt.toLowerCase().includes("youtube")) {
           speak("Opening YouTube...");
           window.open("https://www.youtube.com", "_blank");
-          // hideLoader(); // Hide loader after operation is complete
         } else if (prompt.toLowerCase().includes("google")) {
           speak("Opening Google...");
           window.open("https://www.google.com", "_blank");
-          // hideLoader(); // Hide loader after operation is complete
         } else if (
           prompt.includes("what is your name") ||
           prompt.includes("who are you")
@@ -139,22 +143,23 @@
           speak(
             "My name is VADARLY, your voice assistant. I am here to assist you..."
           );
-          // hideLoader(); // Hide loader after operation is complete
         } else if (prompt.includes("calculator")) {
           speak("Opening Calculator...");
           window.open("Calculator:///");
-          // hideLoader(); // Hide loader after operation is complete
         } else if (
           prompt.toLowerCase().includes("generate image") ||
           prompt.toLowerCase().includes("create image") ||
-          prompt.toLowerCase().includes("create a image")  ||
+          prompt.toLowerCase().includes("create a image") ||
           prompt.toLowerCase().includes("generate a image") ||
-          prompt.toLowerCase().includes("give me the image")
+          prompt.toLowerCase().includes("give me the image") ||
+          prompt.toLowerCase().includes("create picture") ||
+          prompt.toLowerCase().includes("create a picture") ||
+          prompt.toLowerCase().includes("generate picture") ||
+          prompt.toLowerCase().includes("generate a picture") ||
+          prompt.toLowerCase().includes("image of")
         ) {
           speak("Generating image...");
           await generateImage(prompt);
-
-          // hideLoader(); // Hide loader after operation is complete
         } else {
           try {
             const result = await model.generateContent(prompt, {
@@ -170,8 +175,6 @@
             speakLines(linesForSpeech);
           } catch (error) {
             speak("Sorry, I couldn't process your request.");
-          } finally {
-            // hideLoader(); // Ensure loader is hidden even if an error occurs
           }
         }
       }
@@ -227,6 +230,15 @@
         window.speechSynthesis.cancel();
         isSpeaking = false;
         document.getElementById("promptDisplay").innerText = "Stopped";
+      });
+
+      document.getElementById("textSubmitBtn").addEventListener("click", () => {
+        const userInput = document.getElementById("textInput").value.trim();
+        if (userInput) {
+          generateContent(userInput);
+          document.getElementById("textInput").value = "";
+          document.getElementById("promptDisplay").innerText = `You said: ${userInput}`;
+        }
       });
 
       recognition.addEventListener("error", (event) => {
