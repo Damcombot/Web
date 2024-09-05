@@ -123,11 +123,11 @@ h1 {
   #generatedImage {
     max-width: 200px; /* Smaller image for very small screens */
     max-height: 200px;
+    left: 27%;
+    top: 32%;
   }
-
-  
-  #result {
-    max-height: max-content;
+    #result{
+    min-width:100%;
   }
 }
 
@@ -271,15 +271,10 @@ button:hover::before {
   #generatedImage {
     max-width: 180px;
     max-height: 180px;
-    left: 27%;
-    top: 32%;
   }
 
   button {
     font-size: 0.7rem;
     padding: 0.5rem 0.6rem;
-  }
-  #result{
-    min-width:100%;
   }
 }
