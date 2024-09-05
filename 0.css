@@ -148,7 +148,7 @@ h1 {
 }
 .niu1{
   display: flex;
-  right: 4%;
+  right: 1%;
   bottom: 60px;
   position: absolute;
   padding-right: 0;
@@ -156,7 +156,7 @@ h1 {
 }
 .niu {
   display: flex;
-  right: 4%;
+  right: 1%;
   bottom: 0;
   position: absolute;
   padding-right: 0;
