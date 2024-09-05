@@ -93,8 +93,8 @@ h1 {
   .omn{
     font-size: 1.4em;
   }
-   #promptDisplay{
-    bottom:100px;
+  #promptDisplay{
+    bottom:140px;
   }
 
   button {
@@ -123,6 +123,7 @@ h1 {
     max-width: 200px; /* Smaller image for very small screens */
     max-height: 200px;
   }
+
   
   #result {
     max-height: max-content;
@@ -134,15 +135,24 @@ h1 {
   overflow-y: auto;
   max-height: 100%;
   margin-top: 20px;
-  max-width:40%;
   font-size: 1em;
   padding: 0;
   right: 0;
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
   position: absolute;
   margin-right: 0;
   top: 0;
 }
-
+.niu1{
+  display: flex;
+  right: 4%;
+  bottom: 60px;
+  position: absolute;
+  padding-right: 0;
+  margin-right: 0;
+}
 .niu {
   display: flex;
   right: 4%;
@@ -159,7 +169,10 @@ h1 {
 button {
   margin: 6px;
 }
-
+#textInput{
+  border-radius: 10px;
+  border:none;
+}
 * {
   box-sizing: border-box;
 }
@@ -240,28 +253,29 @@ button:hover::before {
   }
 }
 
-#generatedImage {
-
-  left: 10px;
-  top: 10px;
-  position: fixed;
-}
 @media screen and (min-width: 769px){
   #generatedImage {
       max-width: 300px;
       max-height: 300px;
   }
 }
+#generatedImage {
+  top:10px;
+  left:10px;
+  position: fixed;
+  border-radius: 5px;
+}
+
 @media screen and (max-width: 400px) {
   #generatedImage {
     max-width: 180px;
     max-height: 180px;
-    left: 5px;
-    top: 5px;
+    left: 27%;
+    top: 32%;
   }
 
   button {
-    font-size: 0.6rem;
-    padding: 0.2rem 0.5rem;
+    font-size: 0.7rem;
+    padding: 0.25rem 0.6rem;
   }
 }
