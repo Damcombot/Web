@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <link rel="stylesheet" href="0.css" />
+    <link rel="stylesheet" href="sd.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -55,9 +55,11 @@
         }
       }
     </script>
+
     <script type="module">
       import { GoogleGenerativeAI } from "@google/generative-ai";
-      const API_KEY = "AIzaSyCvtEDICx6SUD6vddusu01sRp9nUYw6WTk";
+      
+      const API_KEY = "AIzaSyBhVRbQSns3Ve_pEyO44u9E_6cLFcHWwIU";
       const genAI = new GoogleGenerativeAI(API_KEY);
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
@@ -70,7 +72,7 @@
           return;
         }
 
-        const API_KEY1 = "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";
+        const API_KEY1 = "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";
         const API_URL1 =
           "https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-dev";
 
